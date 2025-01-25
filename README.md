@@ -36,8 +36,6 @@
 </div>
 <br>
 
-[中文文档（原版）](README.old.md) | [English Docs (Original Version) ](README_EN.old.md)
-
 ## 🔧 插件功能
 
 - ✅ 支持多种网盘：`百度网盘`, `阿里云盘`, `天翼云盘`, `迅雷云盘`, `夸克网盘`, `移动云盘`
@@ -53,9 +51,9 @@
 
 请确保已先安装 [Tampermonkey](https://microsoftedge.microsoft.com/addons/detail/%E7%AF%A1%E6%94%B9%E7%8C%B4/iikmkjmpaadaobahmlepeloendndfphd) 脚本管理器
 
-- ~~**[安装地址（原版）](https://www.youxiaohou.com/install.html)**~~
 - **[安装地址（破解）](https://github.com/zsr-lukezhang/panlinker/releases/latest)**
+- ~~[安装地址（原版）](https://www.youxiaohou.com/install.html)~~
 
 ## 👀 其它信息
 
-见 [中文文档（原版）](README.old.md)
+见 [中文文档（原版）](README.old.md) | [English Docs (Original Version) ](README_EN.old.md)
