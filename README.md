@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://www.youxiaohou.com" title="点击访问原版官网">
+  <a href="https://github.com/zsr-lukezhang/panlinker/releases/latest" title="点击跳转下载页面">
     <img width="100" height="100" src="https://www.youxiaohou.com/logo.gif" alt="网盘直链下载助手">
   </a>
 </p>
@@ -19,29 +19,13 @@
 </p>
 
 <div align="center">
-  <h5>
-    <a href="https://www.youxiaohou.com">
-      使用说明（原版）
-    </a>
-    <span> | </span>
+  <h3>
     <a href="https://github.com/zsr-lukezhang/panlinker/releases/latest">
       安装地址
     </a>
     <span> | </span>
-    <a href="https://www.youxiaohou.com/download.html">
-      相关软件（原版）
-    </a>
-    <span> | </span>
-    <a href="https://www.youxiaohou.com/zh-cn/question.html">
-      常见问题（原版）
-    </a>
-    <span> | </span>
-    <a href="https://github.com/syhyz1990/baiduyun/issues">
-      提交Bug（原版）
-    </a>
-    <span> | </span>
     <a href="https://github.com/zsr-lukezhang/panlinker/issues">
-      提交Bug（仅针对开源协议仍需输入等问题）
+      提交Bug
     </a>
   </h3>
 </div>
@@ -53,10 +37,6 @@
 <br>
 
 [中文文档（原版）](README.old.md) | [English Docs (Original Version) ](README_EN.old.md)
-
-【网盘直链下载助手】是一款免费开源**获取百度网盘和阿里云盘文件真实下载地址**的油猴脚本，基于 PCSAPI，支持 Windows，Mac，Linux 等多平台，支持 IDM，XDown，Aria2 等多线程下载工具，支持 JSON-RPC 协议远程下载，支持 cURL 命令下载。
-
-**建议配合网盘超级会员使用**
 
 ## 🔧 插件功能
 
