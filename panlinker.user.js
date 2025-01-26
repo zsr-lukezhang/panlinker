@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name              网盘直链下载助手
 // @namespace         https://github.com/zsr-lukezhang/panlinker
-// @version           6.2.3
-// @author            YouXiaoHou (Cracked by Luke Zhang)
-// @description       （无需开源协议，直接点击确定）👆👆👆👆👆👆👆 - 支持批量获取 ✅百度网盘 ✅阿里云盘 ✅天翼云盘 ✅迅雷云盘 ✅夸克网盘 ✅移动云盘 六大网盘的直链下载地址，配合 IDM，Xdown，Aria2，Curl，比特彗星等工具高效🚀🚀🚀下载，完美适配 Chrome，Edge，FireFox，360，QQ，搜狗，百分，遨游，星愿，Opera，猎豹，Vivaldi，Yandex，Kiwi 等 18 种浏览器。可在无法安装客户端的环境下使用，助手免费开源。😎
+// @version           6.2.7
+// @author            YouXiaoHou (Cracked By Luke Zhang)
+// @description       👆👆👆👆👆👆👆 - 支持批量获取 ✅百度网盘 ✅阿里云盘 ✅天翼云盘 ✅迅雷云盘 ✅夸克网盘 ✅移动云盘 六大网盘的直链下载地址，配合 IDM，Xdown，Aria2，Curl，比特彗星等工具高效🚀🚀🚀下载，完美适配 Chrome，Edge，FireFox，360，QQ，搜狗，百分，遨游，星愿，Opera，猎豹，Vivaldi，Yandex，Kiwi 等 18 种浏览器。可在无法安装客户端的环境下使用，助手免费开源。😎
 // @license           AGPL-3.0-or-later
-// @homepage          https://www.youxiaohou.com/install.html
+// @homepage          https://github.com/zsr-lukezhang/panlinker
 // @supportURL        https://github.com/syhyz1990/baiduyun
-// @updateURL         https://www.youxiaohou.com/panlinker.user.js
-// @downloadURL       https://www.youxiaohou.com/panlinker.user.js
+// @updateURL         https://github.com/zsr-lukezhang/panlinker/raw/refs/heads/master/panlinker.user.js
+// @downloadURL       https://github.com/zsr-lukezhang/panlinker/raw/refs/heads/master/panlinker.user.js
 // @match             *://pan.baidu.com/disk/home*
 // @match             *://yun.baidu.com/disk/home*
 // @match             *://pan.baidu.com/disk/main*
@@ -17,6 +17,7 @@
 // @match             *://yun.baidu.com/s/*
 // @match             *://pan.baidu.com/share/*
 // @match             *://yun.baidu.com/share/*
+// @match             *://openapi.baidu.com/*
 // @match             *://www.aliyundrive.com/s/*
 // @match             *://www.aliyundrive.com/drive*
 // @match             *://www.alipan.com/s/*
@@ -47,10 +48,12 @@
 // @grant             GM_setClipboard
 // @grant             GM_setValue
 // @grant             GM_getValue
+// @grant             GM_deleteValue
 // @grant             GM_openInTab
 // @grant             GM_info
 // @grant             GM_registerMenuCommand
 // @grant             GM_cookie
+// @grant             window.close
 // @icon              data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cGF0aCBkPSJNMTAzLjYgMTA3LjRjMy41LTIuMiA4LjktNi4xIDEzLjgtMTIuNXM3LjMtMTIuNSA4LjUtMTYuNWMuNS0xLjcgMi4yLTcuNSAyLjItMTQuNyAwLTEwLjEtMy4zLTI1LjEtMTUuNC0zNi44LTE0LjUtMTQtMzIuMS0xNC4zLTM1LjctMTQuMy04IDAtMTUuNyAxLjktMjIuNiA1LjJDNDQgMjMgMzUuNyAzMS40IDMwLjggNDEuN2MtMS4zIDIuOC00IDQuNy03LjEgNS00IC4zLTcuNSA0LjQtOC45IDkuNi0uNSAxLjktMS42IDMuNS0zLjEgNC43QzQuNCA2Ni44IDAgNzUuNyAwIDg1YzAgNi44IDIuMyAxMy4xIDYuMSAxOC4yIDUuNSA3LjQgMTQuMiAxMi4yIDI0IDEyLjJoNDcuMWM0LjQgMCAxMS0uNSAxOC4zLTMuNSAzLjItMS40IDUuOS0zIDguMS00LjV6IiBmaWxsPSIjNDQ0Ii8+PHBhdGggZD0iTTExOS44IDY0LjNjLjEtMTcuMS0xMC40LTI4LTEyLjUtMzAuMUM5NSAyMi4xIDc5LjkgMjEuOCA3Ni45IDIxLjhjLTE3LjYgMC0zMy4zIDEwLjUtMzkuOSAyNi43LS42IDEuMy0xLjggMi4zLTMuNCAyLjNoLS40Yy01LjggMC0xMC42IDQuOC0xMC42IDEwLjd2LjVjMCAxLjQtLjggMi42LTEuOSAzLjNDMTMuNCA2OSA4LjggNzYuOCA4LjggODVjMCAxMi4yIDkuOSAyMi4zIDIyLjIgMjIuM2g0NS4yYzMuNi0uMSAxNy42LS45IDI5LjYtMTIgMi45LTIuOCAxMy45LTEzLjcgMTQtMzF6IiBmaWxsPSIjMTM5N2Q4Ii8+PHBhdGggZD0iTTExMC44IDU3LjRsLjIgMy4zYzAgMS4zLTEuMSAyLjQtMi4zIDIuNC0xLjMgMC0yLjMtMS4xLTIuMy0yLjRsLS4xLTIuOHYtLjNjMC0xLjIuOS0yLjIgMi4xLTIuM2guM2MuNyAwIDEuMy4zIDEuNy43LS4yLjEuMy41LjQgMS40em0tMy4zLTEwLjNjMCAxLjItMSAyLjMtMi4yIDIuM2gtLjFjLS44IDAtMS42LS41LTItMS4yLTQuNi04LjMtMTMuMy0xMy41LTIyLjgtMTMuNS0xLjIgMC0yLjMtMS0yLjMtMi4ydi0uMWMwLTEuMiAxLTIuMyAyLjItMi4zaC4xYTMwLjM3IDMwLjM3IDAgMCAxIDE1LjggNC40YzQuNiAyLjggOC40IDYuOCAxMS4xIDExLjUuMS4zLjIuNy4yIDEuMXpNODguMyA3My44TDczLjUgOTMuMmMtMS41IDEuOS0zLjUgMy4xLTUuNyAzLjVoLS4yYy0uNC4xLS44LjEtMS4yLjEtLjYgMC0xLjEtLjEtMS42LS4yLTIuMi0uNC00LjItMS43LTUuNi0zLjVMNDQuMyA3My45Yy0yLTIuNi0yLjUtNS40LTEuNC03LjcuMS0uMS4xLS4yLjItLjIgMS4yLTIgMy41LTMuMiA2LjQtMy4yaDYuNnYtNS43YzAtNi44IDQuNy0xMiAxMC45LTEyIDQuOCAwIDguNSAyLjYgMTAuMyA3LjIuNSAxLjMtLjIgMi43LTEuNSAzLjJzLTIuOC0uMS0zLjMtMS40Yy0xLjEtMi43LTIuOS00LTUuNS00LTMuNSAwLTYgMy02IDd2OC4xYzAgLjUtLjIgMS0uNiAxLjQtLjYuNy0xLjcgMS4xLTIuNiAxLjFoLTguNGMtMS4zIDAtMiAuNC0yLjEuNy0uMi40IDAgMS4zLjkgMi40TDYzLjEgOTBjLjkgMS4yIDIuMSAxLjggMy4zIDEuOHMyLjMtLjYgMy4xLTEuN2wxNC44LTE5LjNjLjktMS4xIDEuMS0yIC45LTIuNC0uMi0uMy0uOS0uNy0yLjEtLjdoLTcuNmMtLjkgMC0xLjctLjUtMi4xLTEuMi0uMy0uNC0uNC0uOC0uNC0xLjMgMC0xLjQgMS4xLTIuNSAyLjUtMi41aDcuNmMzLjEgMCA1LjUgMS4zIDYuNiAzLjVsLjMuN2MuNyAyLjEuMSA0LjYtMS43IDYuOXoiIGZpbGw9IiM0NDQiLz48L3N2Zz4=
 // ==/UserScript==
 
@@ -63,6 +66,8 @@
     const version = scriptInfo.version;
     const author = scriptInfo.author;
     const name = scriptInfo.name;
+    const manageHandler = GM_info.scriptHandler;
+    const manageVersion = GM_info.version;
     const customClass = {
         popup: 'pl-popup',
         header: 'pl-header',
@@ -133,6 +138,10 @@
 
         setValue(name, value) {
             GM_setValue(name, value);
+        },
+
+        deleteValue(name) {
+            GM_deleteValue(name);
         },
 
         getStorage(key) {
@@ -263,11 +272,11 @@
                 let requestObj = GM_xmlhttpRequest({
                     method: "GET", url, headers,
                     onload: (res) => {
-                        resolve(res.finalUrl);
+                        resolve(res.finalUrl)
                     },
                     onerror: (err) => {
                         reject(err);
-                    },
+                    }
                 });
             });
         },
@@ -302,6 +311,11 @@
 
         sleep(time) {
             return new Promise(resolve => setTimeout(resolve, time));
+        },
+
+        getMajorVersion(version) {
+            const [major] = (version || '').split('.');
+            return /^\d+$/.test(major) ? major : null;
         },
 
         findReact(dom, traverseUp = 0) {
@@ -584,13 +598,13 @@
         async initDialog() {
             let result = await Swal.fire({
                 title: pan.init[0],
-                html: `<div><img style="width: 250px;margin-bottom: 10px;" src="${pan.img}" alt="${pan.img}"><input class="swal2-input" id="init" type="text" placeholder="不用输入，直接点按钮"></div>`,
+                html: `<div><img style="width: 250px;margin-bottom: 10px;" src="${pan.img}" alt="${pan.img}"><input class="swal2-input" id="init" type="text" placeholder="请直接点击按钮"></div>`,
                 allowOutsideClick: false,
                 showCloseButton: true,
-                confirmButtonText: '确定'
+                confirmButtonText: '点我'
             });
             if (result.isDismissed && result.dismiss === 'close') return;
-            // 核心代码，绕过判断机制
+            // 核心代码，绕过检查
             if (true) {
                 base.setValue('setting_init_code', pan.num);
                 base.setValue('license', pan.license);
@@ -600,9 +614,9 @@
                 }, 1500);
             } else {
                 await Swal.fire({
-                    title: pan.init[3],
-                    text: pan.init[4],
-                    confirmButtonText: '重新输入',
+                    title: "Error",
+                    text: "这个页面原本是提示暗号错误的，但是这对于破解版是严重的bug",
+                    confirmButtonText: '返回',
                     imageUrl: pan.img,
                 });
                 await this.initDialog();
@@ -651,7 +665,10 @@
             try {
                 GM_cookie && GM_cookie('list', {name: 'BDUSS'}, (cookies, error) => {
                     if (!error) {
-                        base.setStorage("baiduyunPlugin_BDUSS", {BDUSS: cookies[0].value});
+                        let BDUSS = cookies?.[0]?.value;
+                        if (BDUSS) {
+                            base.setStorage("baiduyunPlugin_BDUSS", {BDUSS});
+                        }
                     }
                 });
             } catch (e) {
@@ -877,8 +894,38 @@
         },
 
         async getToken() {
+            const openTab = () => {
+                GM_openInTab(pan.pcs[3], {active: false, insert: true, setParent: true});
+                base.deleteValue('baidu_access_token');
+            };
+
+            const waitForToken = () => new Promise((resolve) => {
+                let attempts = 0;
+                const interval = setInterval(() => {
+                    const token = base.getValue('baidu_access_token');
+                    if (token) {
+                        clearInterval(interval);
+                        resolve(token);
+                    }
+                    attempts++;
+                    if (attempts > 60) {
+                        clearInterval(interval);
+                        resolve('');
+                    }
+                }, 1000);
+            });
+
+            if (manageHandler === 'Tampermonkey' && base.getMajorVersion(manageVersion) >= 5) {
+                openTab();
+                return waitForToken();
+            }
             let res = await base.getFinalUrl(pan.pcs[3]);
-            if (res.indexOf('access_token') === -1) {
+
+            if (!res.includes('authorize') && !res.includes('access_token=')) {
+                openTab();
+                return waitForToken();
+            }
+            if (res.includes('authorize')) {
                 let html = await base.get(pan.pcs[3], {}, 'text');
                 let bdstoken = html.match(/name="bdstoken"\s+value="([^"]+)"/)?.[1];
                 let client_id = html.match(/name="client_id"\s+value="([^"]+)"/)?.[1];
@@ -889,17 +936,17 @@
                     response_type: "token",
                     display: "page",
                     grant_permissions: "basic,netdisk"
-                }
+                };
                 await base.post(pan.pcs[3], base.stringify(data), {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                })
+                });
                 let res2 = await base.getFinalUrl(pan.pcs[3]);
                 let accessToken = res2.match(/access_token=([^&]+)/)?.[1];
-                accessToken && base.setStorage('accessToken', accessToken);
+                accessToken && base.setValue('baidu_access_token', accessToken);
                 return accessToken;
             }
             let accessToken = res.match(/access_token=([^&]+)/)?.[1];
-            accessToken && base.setStorage('accessToken', accessToken);
+            accessToken && base.setValue('baidu_access_token', accessToken);
             return accessToken;
         },
 
@@ -915,7 +962,7 @@
                     return message.error('提示：请打开文件夹后勾选文件！');
                 }
                 fidList = encodeURIComponent(fidList);
-                let accessToken = base.getStorage('accessToken') || await this.getToken();
+                let accessToken = base.getValue('baidu_access_token') || await this.getToken();
                 url = `${pan.pcs[0]}&fsids=${fidList}&access_token=${accessToken}`;
                 res = await base.get(url, {"User-Agent": pan.ua});
             }
@@ -957,6 +1004,7 @@
                     message.error('提示：获取下载链接失败！请刷新网页后重试！');
                 }
             } else {
+                base.deleteValue('baidu_access_token');
                 message.error('提示：获取下载链接失败！请刷新网页后重试！');
             }
         },
@@ -970,7 +1018,7 @@
                 let filename = v.server_filename || v.filename;
                 let ext = base.getExtension(filename);
                 let size = base.sizeFormat(v.size);
-                let dlink = v.dlink;
+                let dlink = v.dlink + '&access_token=' + base.getValue('baidu_access_token');
                 if (mode === 'api') {
                     content += `<div class="pl-item">
                                 <div class="pl-item-name listener-tip" data-size="${size}">${filename}</div>
@@ -1146,6 +1194,25 @@
             pan.license === base.getValue('license') ? this.addButton() : this.addInitButton();
             base.createTip();
             base.registerMenuCommand();
+        },
+
+        async initAuthorize() {
+            let ins = setInterval(() => {
+                if (/openapi.baidu.com\/oauth\/2.0\/authorize/.test(location.href)) {
+                    let confirmButton = document.querySelector('#auth-allow');
+                    if (confirmButton) {
+                        confirmButton.click();
+                        return;
+                    }
+                }
+                if (/openapi.baidu.com\/oauth\/2.0\/login_success/.test(location.href)) {
+                    if (location.href.includes('access_token')) {
+                        let token = location.href.match(/access_token=(.*?)&/)[1];
+                        base.setValue('baidu_access_token', token);
+                        window.close()
+                    }
+                }
+            }, 200)
         }
     };
 
@@ -2842,6 +2909,9 @@
         init() {
             if (/(pan|yun).baidu.com/.test(location.host)) {
                 baidu.initPanLinker();
+            }
+            if (/openapi.baidu.com\/oauth/.test(location.href)) {
+                baidu.initAuthorize()
             }
             if (/www.(aliyundrive|alipan).com/.test(location.host)) {
                 ali.initPanLinker();
